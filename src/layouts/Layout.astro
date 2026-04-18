@@ -1,5 +1,6 @@
 ---
 import "../styles/main.css";
+import Header from '../components/header.astro';
 ---
 
 <!doctype html>
@@ -13,18 +14,7 @@ import "../styles/main.css";
 		<title>A Good Case</title>
 	</head>
 	<body>
-		<nav>
-			<a href="/">Home</a>
-			<a href="/productlist">Specialøl</a>
-			<a href="/">Smagkasser</a>
-			<a href="/">Abonnement</a>
-            <a href="/">Giv en Gave</a>
-            <a href="/">Ølsmagning</a>
-            <a href="/">Erhverv</a>
-            <a href="/">Ale Øl</a>
-
-		</nav>
-		<h1>A Good Case</h1>
+		<Header />
 		<slot />
 		<footer>
 			My Contacts
