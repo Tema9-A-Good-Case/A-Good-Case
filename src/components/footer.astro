@@ -1,0 +1,197 @@
+---
+
+---
+
+<footer class="site-footer">
+  <div class="footer-inner">
+
+    <div class="footer-top">
+
+
+      <div class="footer-col">
+        <h2>KONTAKT OS</h2>
+
+        <p>INFO@AGOODCASE.DK</p>
+        <p>+45 30 45 99 90</p>
+
+        <p>A GOOD CASE APS</p>
+        <p>VALLENSBÆKVEJ 55</p>
+        <p>2605 BRØNDBY</p>
+      </div>
+
+   
+      <div class="footer-col center">
+        <h2>ÅBNINGSTIDER</h2>
+
+        <p>ONSDAG-FREDAG</p>
+        <p>10:00 - 17:00</p>
+
+        <img src="Imgs/Logo.webp" alt="Logo" class="footer-logo" />
+      </div>
+
+
+      <div class="footer-col links">
+        <h2>AGOODCASE.DK</h2>
+
+        <a href="#">OM OS</a>
+        <a href="#">HANDELSBETINGELSER</a>
+        <a href="#">PERSONDATAPOLITIK</a>
+        <a href="#">LEVERING</a>
+        <a href="#">PARTNERSKABER</a>
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+
+      <div class="socials">
+        <img src="Imgs/insta.webp" alt="Instagram" />
+        <img src="Imgs/facebook.webp" alt="Facebook" />
+        <img src="Imgs/linkedin.webp" alt="LinkedIn" />
+      </div>
+
+      <img src="Imgs/alder.webp" alt="Age restriction" class="age-badge" />
+
+      <div class="trustpilot">
+        <img src="Imgs/stars.webp" alt="Rating" />
+        <span>4.8 Trustpilot</span>
+      </div>
+
+    </div>
+
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    background: var(--the-background);
+    padding: 60px 20px;
+    border-top: 5px solid var(--the-beige);
+  }
+
+  .footer-inner {
+    max-width: 1440px;
+    margin: 0 auto;
+  }
+
+  .footer-top {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 40px;
+    padding-inline: 20px;
+  }
+
+  .footer-col {
+    text-align: center;
+  }
+
+  .footer-col h2 {
+    font-family: "Anton", sans-serif;
+    font-weight: 400;
+    letter-spacing: 0.02em;
+    margin-bottom: 40px;
+  }
+
+  .footer-col p,
+  .footer-col a {
+    font-family: var(--font);
+    display: block;
+    margin-bottom: 10px;
+    text-decoration: none;
+    color: black;
+  }
+
+  .footer-col:first-child p:nth-of-type(3) {
+    margin-top: 30px;
+  }
+
+  .center {
+    text-align: center;
+  }
+
+  .footer-logo {
+    width: 300px;
+    margin: 60px auto 0;
+  }
+
+  .links {
+    text-align: center;
+  }
+
+  .footer-bottom {
+    margin-top: 50px;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: end;
+    gap: 16px;
+  }
+
+  .socials {
+    display: flex;
+    align-items: center;
+    justify-self: start;
+    gap: 15px;
+    padding-left: 150px;
+  }
+
+  .socials img {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+    flex-shrink: 0;
+  }
+
+  .age-badge {
+    width: 200px;
+    justify-self: center;
+  }
+
+  .trustpilot {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    justify-self: end;
+    gap: 10px;
+    padding-right: 150px;
+    font-family: var(--font);
+    font-size: 14px;
+  }
+
+  .trustpilot img {
+    width: 80px;
+  }
+
+  @media (max-width: 768px) {
+    .footer-top {
+      grid-template-columns: 1fr;
+      gap: 32px;
+      text-align: center;
+    }
+
+    .links {
+      text-align: center;
+    }
+
+    .footer-logo {
+      width: 170px;
+    }
+
+    .footer-bottom {
+      grid-template-columns: 1fr;
+      justify-items: center;
+      gap: 20px;
+    }
+
+    .socials,
+    .trustpilot,
+    .age-badge {
+      justify-self: center;
+    }
+
+    .socials,
+    .trustpilot {
+      padding-left: 0;
+      padding-right: 0;
+    }
+  }
+</style>
