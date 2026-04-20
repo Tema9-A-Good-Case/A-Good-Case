@@ -1,14 +1,11 @@
 ---
+import Menu from "./Menu.astro";
 const cartCount = 3;
 ---
 
 <header class="site-header">
   <div class="header-inner">
-    <button class="icon-button menu-button" aria-label="Open menu">
-      <span></span>
-      <span></span>
-      <span></span>
-    </button>
+  <Menu />
 
     <a href="/" class="brand" aria-label="A Good Case homepage">
       <img src="Imgs/Logo.webp" alt="A Good Case" class="brand-logo" />

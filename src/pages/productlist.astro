@@ -1,10 +1,32 @@
 ---
-
+import "../../styles/main.css";
 import Layout from '../layouts/Layout.astro';
+import Card from '../components/card.astro';
+const endpoint = 'https://zuieoildetgsrnwghaza.supabase.co/rest/v1/Beer?select=*';
 
 
+const options ={
+	headers:{
+		apikey: "sb_publishable_fRKMouw3PcFSl16n3SjRxA_JOmMHW48",
+	}
+}
+
+const data = await fetch(endpoint, options).then(response=>response.json());
+
+//@ts-nocheck
 ---
 
 <Layout>
-	<h2>IPA</h2>
+	<h2>Products</h2>
+	<section>
+		{data.map((product: any) => (<Card {product}/>))}
+	</section>
 </Layout>
+
+<style>
+section{
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 1rem;
+}
+</style>
