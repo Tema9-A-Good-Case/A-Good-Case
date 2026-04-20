@@ -1,0 +1,255 @@
+---
+
+//@ts-nocheck
+
+---
+
+<button
+  class="icon-button menu-button"
+  aria-label="Open menu"
+  type="button"
+  data-open-menu
+  aria-expanded="false"
+>
+  <span></span>
+  <span></span>
+  <span></span>
+</button>
+
+<div class="menu-overlay" data-menu-overlay>
+  <div class="menu-panel menu-main">
+    <button
+      class="menu-close"
+      type="button"
+      aria-label="Close menu"
+      data-close-menu
+    >
+      ×
+    </button>
+
+    <nav class="menu-list" aria-label="Main menu">
+      <button class="menu-item-button" type="button" data-open-submenu>
+        <span>SPECIALØL</span>
+        <span class="menu-item-arrow" aria-hidden="true">></span>
+      </button>
+
+      <a href="/" class="menu-item">SMAGSKASSER</a>
+      <a href="/" class="menu-item">ABONNEMENT</a>
+      <a href="/" class="menu-item">GIV EN GAVE</a>
+      <a href="/" class="menu-item">ØLSMAGNINGER</a>
+      <a href="/" class="menu-item">ERHVERV</a>
+      <a href="/" class="menu-item">FADØL</a>
+    </nav>
+  </div>
+
+  <div class="menu-panel menu-sub">
+    <button
+      class="menu-close"
+      type="button"
+      aria-label="Close menu"
+      data-close-menu
+    >
+      ×
+    </button>
+
+    <button class="menu-back" type="button" data-back-submenu>
+      <span class="menu-back-arrow" aria-hidden="true">&lt;</span>
+      <span>TILBAGE</span>
+    </button>
+
+    <nav class="menu-list" aria-label="Specialøl submenu">
+      <a href="/productlist" class="menu-item">IPA / PALE ALE</a>
+      <a href="/productlist" class="menu-item">LAGER / PILSNER</a>
+      <a href="/productlist" class="menu-item">DET SYRLIGE</a>
+      <a href="/productlist" class="menu-item">DET MØRKE</a>
+      <a href="/productlist" class="menu-item">DET LYSE</a>
+      <a href="/productlist" class="menu-item">ALKOHOLFRI</a>
+    </nav>
+  </div>
+</div>
+
+<style>
+  .icon-button {
+    background: transparent;
+    border: 0;
+    padding: 0;
+    cursor: pointer;
+  }
+
+  .menu-button {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 8px;
+    width: 52px;
+    height: 52px;
+  }
+
+  .menu-button span {
+    display: block;
+    width: 36px;
+    height: 3px;
+    background: #000;
+    border-radius: 999px;
+  }
+
+  .menu-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 60;
+    display: none;
+    padding: 5px 5px;
+    background: rgba(0, 0, 0, 0.238);
+  }
+
+  .menu-overlay.is-open {
+    display: flex;
+  }
+
+  .menu-panel {
+    width: 300px;
+    height: 550px;
+    background: #f3f3f3;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.16);
+    padding: 28px 46px 40px;
+  }
+
+  .menu-sub {
+    display: none;
+  }
+
+  .menu-overlay.show-submenu .menu-main {
+    display: none;
+  }
+
+  .menu-overlay.show-submenu .menu-sub {
+    display: block;
+  }
+
+  .menu-close {
+    border: 0;
+    background: transparent;
+    color: #000;
+    font-size: 40px;
+    line-height: 1;
+    cursor: pointer;
+    margin-bottom: 18px;
+  }
+
+  .menu-list {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .menu-item,
+  .menu-item-button,
+  .menu-back {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    border: 0;
+    border-bottom: 2px solid var(--the-green);
+    padding: 0 0 8px;
+    color: #000;
+    text-decoration: none;
+    text-transform: uppercase;
+    font-family: "Anton", sans-serif;
+    font-size: 28px;
+    line-height: 1;
+    letter-spacing: 0.01em;
+    text-align: left;
+    background: transparent;
+    cursor: pointer;
+  }
+
+  .menu-item-arrow,
+  .menu-back-arrow {
+    font-size: 28px;
+    line-height: 1;
+  }
+
+  .menu-back {
+    justify-content: flex-start;
+    gap: 14px;
+    margin-bottom: 24px;
+  }
+
+  @media (max-width: 980px) {
+    .menu-overlay {
+      padding: 20px 12px;
+    }
+
+    .menu-panel {
+      min-height: auto;
+      padding: 20px 24px 28px;
+    }
+
+    .menu-item,
+    .menu-item-button,
+    .menu-back {
+      font-size: 22px;
+    }
+
+    .menu-item-arrow,
+    .menu-back-arrow {
+      font-size: 22px;
+    }
+
+    .menu-close {
+      font-size: 32px;
+    }
+  }
+</style>
+
+<script>
+  const openButton = document.querySelector("[data-open-menu]");
+  const overlay = document.querySelector("[data-menu-overlay]");
+  const closeButtons = document.querySelectorAll("[data-close-menu]");
+  const openSubmenuButton = document.querySelector("[data-open-submenu]");
+  const backButton = document.querySelector("[data-back-submenu]");
+
+  if (!openButton || !overlay) {
+    // Stop quietly if required menu elements are not found.
+  } else {
+    // Reusable helper: fully close the menu and go back to main panel.
+    const closeMenu = () => {
+      overlay.classList.remove("is-open");
+      overlay.classList.remove("show-submenu");
+    };
+
+    // Burger click: open menu overlay and always start on main panel.
+    openButton.addEventListener("click", () => {
+      overlay.classList.add("is-open");
+      overlay.classList.remove("show-submenu");
+    });
+
+    // Any X button should close the menu.
+    closeButtons.forEach((button) => {
+      button.addEventListener("click", closeMenu);
+    });
+
+    // If submenu trigger exists, show the submenu panel.
+    if (openSubmenuButton) {
+      openSubmenuButton.addEventListener("click", () => {
+        overlay.classList.add("show-submenu");
+      });
+    }
+
+    // If back button exists, return from submenu to main panel.
+    if (backButton) {
+      backButton.addEventListener("click", () => {
+        overlay.classList.remove("show-submenu");
+      });
+    }
+
+    // Click on dark background closes menu.
+    // Click inside the white panel does not close it.
+    overlay.addEventListener("click", (event) => {
+      if (event.target === overlay) {
+        closeMenu();
+      }
+    });
+  }
+</script>
