@@ -185,19 +185,12 @@ const trackLogos = [...logos, ...logos];
   // @ts-nocheck
 
   // Find the outer carousel section using its data-attribute selector.
-  // document.querySelector(...) returns the first matching element or null.
   const carousel = document.querySelector("[data-brewery-carousel]");
-
   // From the carousel section, find the moving track element.
-  // Optional chaining (?.) means: if carousel is null, do not crash, just return undefined.
   const trackElement = carousel?.querySelector("[data-carousel-track]");
 
   // Find all dot buttons inside the carousel.
   const dotButtons = carousel?.querySelectorAll("[data-dot]");
-
-  // Guard clause:
-  // If we do not have a track OR there are no dots, we cannot run a carousel.
-  // ! means "not".
   // dotButtons.length is number of dot elements.
   if (!trackElement || !dotButtons.length) {
   } else {
@@ -235,16 +228,12 @@ const trackLogos = [...logos, ...logos];
 
     // Update which dot appears active.
     const updateDots = () => {
-      // Keep active index inside 0..totalDots-1 even when currentIndex gets bigger.
-      // This wraps index values (0..8, then 9 becomes 0, etc.).
       const activeIndex = ((currentIndex % totalDots) + totalDots) % totalDots;
-
       // Loop over each dot and toggle "is-active" on the matching one.
       dotButtons.forEach((dot, i) => {
         dot.classList.toggle("is-active", i === activeIndex);
       });
     };
-
     // Single function to change index and redraw both track + dots.
     const goToIndex = (index) => {
       currentIndex = index;
@@ -252,8 +241,7 @@ const trackLogos = [...logos, ...logos];
       updateDots();
     };
 
-    // Initial render when page loads:
-    // place track at index 0 instantly, then mark dot 0 active.
+    // Initial render when page loads: position track and set correct dot.
     setTransform(currentIndex, false);
     updateDots();
 
@@ -266,16 +254,11 @@ const trackLogos = [...logos, ...logos];
 
     // Auto-play only if there is more than one logo.
     if (totalDots > 1) {
-      // Every 2000ms, advance by one index.
       setInterval(() => {
         goToIndex(currentIndex + 1);
       }, 2000);
     }
-
     // Seamless loop trick:
-    // We duplicated logos in trackLogos, so we can slide into the clone set.
-    // After transition finishes and index passes real list,
-    // snap back to equivalent original index with no animation.
     trackElement.addEventListener("transitionend", () => {
       if (currentIndex >= totalDots) {
         currentIndex -= totalDots;
