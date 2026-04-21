@@ -1,0 +1,53 @@
+---
+interface Props {
+  text?: string;
+}
+
+const {
+  text = "GODE PRISER - HURTIG LEVERING - PRIS GARANTI - GODE PRISER - HURTIG LEVERING - PRIS GARANTI - GODE PRISER - HURTIG LEVERING - PRIS GARANTI",
+} = Astro.props;
+---
+
+<section class="marquee">
+  <div class="marquee-track">
+    <span>{text}</span>
+    <span>{text}</span>
+  </div>
+</section>
+
+<style>
+  .marquee {
+    background: var(--the-green);
+    overflow: hidden;
+    width: 100%;
+    padding: 18px 0;
+    margin: 50px 0;
+  }
+
+  .marquee-track {
+    display: flex;
+    width: max-content;
+    animation: marquee 11s linear infinite;
+  }
+
+  .marquee-track span {
+    flex-shrink: 0;
+    color: white;
+    font-family: "Anton", sans-serif;
+    font-size: 4rem;
+    line-height: 1;
+    text-transform: uppercase;
+    white-space: nowrap;
+    padding-right: 80px;
+  }
+
+  @keyframes marquee {
+    from {
+      transform: translateX(0);
+    }
+
+    to {
+      transform: translateX(-50%);
+    }
+  }
+</style>

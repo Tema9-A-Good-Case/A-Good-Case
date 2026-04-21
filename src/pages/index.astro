@@ -1,7 +1,11 @@
 ---
+import Carousel from "../components/Carousel.astro";
+import Nyhedsbrev from "../components/Nyhedsbrev.astro";
+import Marquee from "../components/Marquee.astro";
 import Button from "../components/button.astro";
+import Hero from "../components/hero.astro";
 import Layout from '../layouts/Layout.astro';
-const endpoint = "https://zuieoildetgsrnwghaza.supabase.co/rest/v1/Beer?select=*";
+const endpoint = "https://zuieoildetgsrnwghaza.supabase.co/rest/v1/Beer?select=*&order=id.asc";
 
 const options = {
   headers: {
@@ -24,28 +28,7 @@ const mestSolgte = beers.slice(4, 8);
 ---
 
 <Layout>
-  <section class="hero">
-
-    <div class="hero-left">
-      <img src="/Imgs/Dagens-tilbud.webp" alt="Beer tilbud" class="hero-beers" />
-      <img src="/Imgs/spar.webp" alt="Spar op til 60%" class="spar" />
-      <div class="hero-btn">
-        <Button text="SE TILBUD" />
-      </div>
-    </div>
-
-    <div class="hero-center">
-      <h1>
-        <span>DAGENS</span>
-        <span>TILBUD</span>
-      </h1>
-    </div>
-
-    <div class="hero-right">
-      <img src="/Imgs/circle-text.webp" alt="Markedets bedste ølpriser" />
-    </div>
-
-  </section>
+  <Hero />
 
     <section class="product-section">
       <h2 class="section-title">NYHEDER</h2>
@@ -53,7 +36,12 @@ const mestSolgte = beers.slice(4, 8);
       <div class="products">
         {nyheder.map((product: any) => (
           <article class="product-card">
-            <img src={product.image} alt="productimage" />
+            <div class="product-image-wrap">
+              {product.discount && (
+                <span class="product-discount">SPAR {product.discount}</span>
+              )}
+              <img src={product.image} alt="productimage" />
+            </div>
             <h3 class="product-brand">{product.brand}</h3>
             <p class="product-name">{product.name}</p>
             <p class="product-price">{product.price_now} DKK</p>
@@ -67,13 +55,20 @@ const mestSolgte = beers.slice(4, 8);
       </div>
     </section>
 
+	<Marquee />
+
     <section class="product-section best-sellers">
       <h2 class="section-title">MEST SOLGTE</h2>
 
       <div class="products">
         {mestSolgte.map((product: any) => (
           <article class="product-card">
-            <img src={product.image} alt="productimage" />
+            <div class="product-image-wrap">
+              {product.discount && (
+                <span class="product-discount">SPAR {product.discount}</span>
+              )}
+              <img src={product.image} alt="productimage" />
+            </div>
             <h3 class="product-brand">{product.brand}</h3>
             <p class="product-name">{product.name}</p>
             <p class="product-price">{product.price_now} DKK</p>
@@ -86,94 +81,54 @@ const mestSolgte = beers.slice(4, 8);
         <Button text="SE MEST SOLGTE" href="/productlist" />
       </div>
     </section>
+
+	<Nyhedsbrev />
+	<Carousel />
+	<section class="service-icons">
+  <div class="service-item">
+    <h3>FRI FRAGT OVER 499,-</h3>
+    <img src="Imgs/fragt.webp" alt="Fri fragt" />
+  </div>
+
+  <div class="service-item levering">
+    <h3>HURTIG LEVERING</h3>
+    <img src="Imgs/levering.webp" alt="Hurtig levering" />
+  </div>
+
+  <div class="service-item">
+    <h3>PRISGARANTI</h3>
+    <img src="Imgs/pris.webp" alt="Prisgaranti" />
+  </div>
+
+  <div class="service-item">
+    <h3>4.8 TRUSTPILOT</h3>
+    <img src="Imgs/trustpilot.webp" alt="Trustpilot" />
+  </div>
+</section>
+
+<section class="about-section">
+  <div class="about-text">
+    <h2>HVEM ER VI?</h2>
+
+    <p>
+      Vi tror på, at god øl starter med gode beslutninger. Derfor arbejder vi
+      med råvarer, der stadig har masser af kvalitet, men som ofte bliver
+      overset. Ikke fordi de er dårligere, men fordi systemet er sat op på én
+      bestemt måde. Vi gør det anderledes. Og vi gør det for smagens skyld.
+    </p>
+
+    <div class="about-button">
+      <Button text="LÆS MERE" />
+    </div>
+  </div>
+
+  <div class="about-image">
+    <img src="Imgs/Om-os.webp" alt="A Good Case team" />
+  </div>
+</section>
 </Layout>
 
 <style>
-
-/* Hero Section */
-
-  .hero {
-    position: relative;
-    display: grid;
-    grid-template-columns: minmax(220px, 420px) 1fr 260px;
-    align-items: center;
-    height: 350px;
-    background: var(--the-beige);
-    overflow: visible;
-    padding: 0 0 0 32px;
-  }
-
-  .hero-left {
-    position: relative;
-    height: 100%;
-    display: flex;
-    align-items: flex-end;
-	margin-left: 100px;
-  }
-
-  .hero-beers {
-    height: 340px;
-    width: auto;
-    object-fit: contain;
-  }
-
-  .spar {
-    position: absolute;
-    top: 12px;
-    left: -12px;
-    width: 200px;
-  }
-
-  .hero-btn {
-    position: absolute;
-    bottom: 28px;
-    left: 50%;
-    transform: translateX(-50%);
-    white-space: nowrap;
-  }
-
-  .hero-center {
-    display: flex;
-    align-items: center;
-    padding-left: 32px;
-	margin-left: 100px;
-  }
-
-  .hero-center span:nth-child(1) {
-	margin-left: 100px;
-	display: block;
-	margin-bottom: 20px;
-  }
-
-  .hero-center h1 {
-    display: flex;
-    flex-direction: column;
-    margin: 0;
-    font-family: "Anton", sans-serif;
-    font-weight: 400;
-    font-size: 10rem;
-    line-height: 0.9;
-    letter-spacing: 0.02em;
-    color: var(--the-green);
-  }
-
-  .hero-right {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-  }
-
-  .hero-right img {
-    width: 240px;
-    height: 240px;
-    object-fit: contain;
-    transform: translateY(70%);
-    position: relative;
-    bottom: 0;
-	margin-right: 100px;
-  }
-
   /* Nyheder og Mest Solgte */
   .product-section {
     padding: 44px 32px 8px;
@@ -209,11 +164,32 @@ const mestSolgte = beers.slice(4, 8);
     min-height: 470px;
   }
 
+  .product-image-wrap {
+    position: relative;
+    width: 100%;
+  }
+
   .product-card img {
     width: 100%;
     height: 280px;
     object-fit: contain;
     margin-bottom: 6px;
+  }
+
+  .product-discount {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    z-index: 1;
+    padding: 4px 10px;
+    border-radius: 8px;
+    background: var(--the-green);
+    color: white;
+    font-size: 0.85rem;
+    font-family: var(--font);
+    font-weight: 700;
+    text-transform: uppercase;
+    line-height: 1;
   }
 
   .product-brand {
@@ -259,6 +235,77 @@ const mestSolgte = beers.slice(4, 8);
     letter-spacing: 0.02em;
   }
 
+  .service-icons {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  padding: 42px 32px 46px;
+  text-align: center;
+  margin-top: 60px;
+}
+
+.service-item h3 {
+  margin: 0 0 50px;
+  font-size: 1.5rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-family: var(--font);
+}
+
+.service-item img {
+  width: 70px;
+  height: 70px;
+  object-fit: contain;
+  object-position: center;
+  margin: 0 auto;
+}
+.service-item.levering img {
+	  width: 80px;
+  height: 80px;
+}
+
+
+.about-section {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  background: var(--the-beige);
+  align-items: stretch;
+  margin-top: 60px;
+}
+
+.about-text {
+  padding: 86px 30px 40px;
+}
+
+.about-text h2 {
+  margin: 0 30px 48px;
+  color: var(--the-green);
+  font-family: "Anton", sans-serif;
+  font-size: 4rem;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.about-text p {
+  margin: 0 30px 32px;
+  max-width: 560px;
+  font-size: 1.05rem;
+  line-height: 1.8;
+  color: #111;
+  font-family: var(--font);
+}
+
+.about-button {
+  margin-left: 30px;
+}
+
+.about-image img {
+  width: 100%;
+  height: 101%;
+  object-fit: cover;
+  display: block;
+}
+
   @media (max-width: 1000px) {
     .products {
       grid-template-columns: repeat(2, 1fr);
@@ -273,11 +320,13 @@ const mestSolgte = beers.slice(4, 8);
   @media (max-width: 640px) {
     .section-title {
       font-size: 2.5rem;
-      margin-bottom: 16px;
+      margin: 0 16px 16px;
     }
 
     .products {
+      grid-template-columns: 1fr;
       gap: 18px;
+      padding: 0 8px;
     }
 
     .product-card img {
@@ -292,6 +341,156 @@ const mestSolgte = beers.slice(4, 8);
     .section-cta :global(.btn) {
       padding: 8px 16px;
       font-size: 1rem;
+    }
+
+    .product-section {
+      padding: 28px 8px 8px;
+    }
+
+    .service-icons {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 28px;
+      padding: 32px 16px 36px;
+    }
+
+    .service-item h3 {
+      margin: 0 0 32px;
+      font-size: 1.1rem;
+    }
+
+    .service-item img {
+      width: 60px;
+      height: 60px;
+    }
+
+    .service-item.levering img {
+      width: 68px;
+      height: 68px;
+    }
+
+    .about-section {
+      grid-template-columns: 1fr;
+    }
+
+    .about-text {
+      padding: 40px 24px 32px;
+    }
+
+    .about-text h2 {
+      font-size: 2.5rem;
+      margin: 0 0 32px;
+    }
+
+    .about-text p {
+      font-size: 1rem;
+      margin: 0 0 24px;
+      line-height: 1.6;
+    }
+
+    .about-image img {
+      max-height: 420px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .section-title {
+      font-size: 3rem;
+      margin: 22px 0px 22px;
+	  text-align: center;
+    }
+
+    .products {
+      gap: 14px;
+      padding: 0 4px;
+    }
+
+    .product-card {
+      min-height: 360px;
+    }
+
+    .product-card img {
+      height: 180px;
+      width: 100%;
+    }
+
+	.product-discount {
+	 margin-left: 70px;
+	}
+
+    .product-brand {
+      font-size: 1rem;
+    }
+
+    .product-name {
+      font-size: 1rem;
+      max-width: 100%;
+      min-height: 2.2rem;
+    }
+
+    .product-price {
+      font-size: 0.95rem;
+    }
+
+    .product-section {
+      padding: 20px 8px 4px;
+    }
+
+    .section-cta :global(.btn) {
+      padding: 6px 14px;
+      font-size: 0.9rem;
+    }
+
+    .service-icons {
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      padding: 24px 12px 28px;
+    }
+
+    .service-item h3 {
+      margin: 0 0 24px;
+      font-size: 1rem;
+    }
+
+    .service-item img {
+      width: 54px;
+      height: 54px;
+    }
+
+    .service-item.levering img {
+      width: 60px;
+      height: 60px;
+    }
+
+    .about-text {
+      padding: 32px 16px 24px;
+    }
+
+    .about-text h2 {
+      font-size: 2rem;
+      margin: 0 0 24px;
+	  text-align: center;
+    }
+
+    .about-text p {
+      font-size: 0.80rem;
+      margin: 0 0 18px;
+      line-height: 1.5;
+	  text-align: center;
+    }
+
+    .about-button {
+      margin-left: 0;
+	  display: flex;
+	  justify-content: center;
+    }
+
+    .about-image {
+      min-height: 280px;
+    }
+
+    .about-image img {
+      height: 280px;
+      max-height: none;
     }
   }
 </style>

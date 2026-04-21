@@ -182,7 +182,6 @@
     }
 
     .menu-panel {
-      min-height: auto;
       padding: 20px 24px 28px;
     }
 
@@ -199,6 +198,32 @@
 
     .menu-close {
       font-size: 32px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .menu-button {
+      width: 40px;
+      height: 40px;
+      gap: 6px;
+    }
+
+    .menu-button span {
+      width: 28px;
+      height: 2.5px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .menu-button {
+      width: 34px;
+      height: 34px;
+      gap: 5px;
+    }
+
+    .menu-button span {
+      width: 24px;
+      height: 2px;
     }
   }
 </style>
