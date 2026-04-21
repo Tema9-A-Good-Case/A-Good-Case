@@ -1,0 +1,292 @@
+---
+const logos = [
+  { src: "/Imgs/alefarm.webp", alt: "Alefarm Brewing" },
+  { src: "/Imgs/brutal.webp", alt: "Brutal Brewing" },
+  { src: "/Imgs/dry.webp", alt: "Dry & Bitter" },
+  { src: "/Imgs/to.webp", alt: "To Øl" },
+  { src: "/Imgs/gamma.webp", alt: "Gamma Brewing Co." },
+  { src: "/Imgs/amager.webp", alt: "Amager Bryghus" },
+  { src: "/Imgs/founders.webp", alt: "Founders Brewing" },
+  { src: "/Imgs/northern.webp", alt: "Northern Monk" },
+  { src: "/Imgs/crew.webp", alt: "Crew Republic" },
+];
+
+// Duplicate once so moving near the end still shows a full row of logos.
+const trackLogos = [...logos, ...logos];
+---
+
+<section class="brewery-carousel" data-brewery-carousel>
+  <h2>UDPLUK AF BRYGHUSE</h2>
+
+  <div class="carousel-window">
+    <div class="carousel-track" data-carousel-track>
+      {trackLogos.map((logo) => (
+        <div class="logo-item">
+          <img src={logo.src} alt={logo.alt} />
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <div class="carousel-dots" data-carousel-dots>
+    {logos.map((_, index) => (
+      <button
+        class:list={["carousel-dot", index === 0 && "is-active"]}
+        type="button"
+        aria-label={`Go to logo ${index + 1}`}
+        data-dot={index}
+      ></button>
+    ))}
+  </div>
+</section>
+
+<style>
+  .brewery-carousel {
+    background: var(--the-background);
+    padding: 40px 20px 30px;
+    text-align: center;
+  }
+
+  .brewery-carousel h2 {
+    margin: 0 0 60px;
+    color: #000;
+    font-family: "Anton", sans-serif;
+    font-size: 4.5rem;
+    line-height: 1;
+    text-transform: uppercase;
+  }
+
+  .carousel-window {
+    overflow: hidden;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .carousel-track {
+    display: flex;
+    transition: transform 0.5s ease;
+  }
+
+  .logo-item {
+    flex: 0 0 calc(100% / 5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 120px;
+  }
+
+  .logo-item img {
+    max-width: 140px;
+    max-height: 90px;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+  }
+
+  .carousel-dots {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 26px;
+  }
+
+  .carousel-dot {
+    width: 12px;
+    height: 12px;
+    border: 0;
+    border-radius: 999px;
+    background: #d3d3d3;
+    cursor: pointer;
+    padding: 0;
+  }
+
+  .carousel-dot.is-active {
+    background: #000;
+  }
+
+  @media (max-width: 900px) {
+    .logo-item {
+      flex-basis: calc(100% / 3);
+    }
+
+    .logo-item img {
+      max-width: 110px;
+      max-height: 70px;
+    }
+
+    .brewery-carousel h2 {
+      font-size: 3rem;
+      margin: 0 0 48px;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .brewery-carousel {
+      padding: 32px 16px 24px;
+    }
+
+    .brewery-carousel h2 {
+      font-size: 2rem;
+      margin: 0 0 36px;
+    }
+
+    .carousel-dots {
+      gap: 8px;
+      margin-top: 20px;
+    }
+
+    .carousel-dot {
+      width: 10px;
+      height: 10px;
+    }
+
+    .logo-item {
+      min-height: 100px;
+    }
+
+    .logo-item img {
+      max-width: 90px;
+      max-height: 60px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .brewery-carousel {
+      padding: 24px 12px 20px;
+    }
+
+    .brewery-carousel h2 {
+      font-size: 2.2rem;
+      margin: 0 0 28px;
+    }
+
+    .carousel-dots {
+      gap: 6px;
+      margin-top: 16px;
+    }
+
+    .carousel-dot {
+      width: 8px;
+      height: 8px;
+    }
+
+    .logo-item {
+      min-height: 80px;
+    }
+
+    .logo-item img {
+      max-width: 70px;
+      max-height: 50px;
+    }
+  }
+</style>
+
+<script>
+  // @ts-nocheck
+
+  // Find the outer carousel section using its data-attribute selector.
+  // document.querySelector(...) returns the first matching element or null.
+  const carousel = document.querySelector("[data-brewery-carousel]");
+
+  // From the carousel section, find the moving track element.
+  // Optional chaining (?.) means: if carousel is null, do not crash, just return undefined.
+  const trackElement = carousel?.querySelector("[data-carousel-track]");
+
+  // Find all dot buttons inside the carousel.
+  const dotButtons = carousel?.querySelectorAll("[data-dot]");
+
+  // Guard clause:
+  // If we do not have a track OR there are no dots, we cannot run a carousel.
+  // ! means "not".
+  // dotButtons.length is number of dot elements.
+  if (!trackElement || !dotButtons.length) {
+  } else {
+    // Current position in the logo sequence. Starts at first item (0).
+    let currentIndex = 0;
+
+    // Total number of real logos/dots (9 in your case).
+    const totalDots = dotButtons.length;
+
+    // Duration in milliseconds for each slide animation.
+    const duration = 200;
+
+    // Helper function that tells us how many logos are visible now.
+    // On screens <= 900px: 3 logos.
+    // On larger screens: 5 logos.
+    const getVisibleLogos = () =>
+      window.matchMedia("(max-width: 900px)").matches ? 3 : 5;
+
+    // Move track to a given index.
+    // index = which logo offset we want.
+    // withAnimation = true for smooth motion, false for instant snap.
+    const setTransform = (index, withAnimation = true) => {
+      // Convert index to percent shift.
+      // Example desktop: one step = 100/5 = 20%.
+      const shiftPercent = index * (100 / getVisibleLogos());
+
+      // Set CSS transition based on whether we want animation.
+      trackElement.style.transition = withAnimation
+        ? `transform ${duration}ms ease`
+        : "none";
+
+      // Actually move the track left (negative direction) by computed percent.
+      trackElement.style.transform = `translateX(-${shiftPercent}%)`;
+    };
+
+    // Update which dot appears active.
+    const updateDots = () => {
+      // Keep active index inside 0..totalDots-1 even when currentIndex gets bigger.
+      // This wraps index values (0..8, then 9 becomes 0, etc.).
+      const activeIndex = ((currentIndex % totalDots) + totalDots) % totalDots;
+
+      // Loop over each dot and toggle "is-active" on the matching one.
+      dotButtons.forEach((dot, i) => {
+        dot.classList.toggle("is-active", i === activeIndex);
+      });
+    };
+
+    // Single function to change index and redraw both track + dots.
+    const goToIndex = (index) => {
+      currentIndex = index;
+      setTransform(currentIndex, true);
+      updateDots();
+    };
+
+    // Initial render when page loads:
+    // place track at index 0 instantly, then mark dot 0 active.
+    setTransform(currentIndex, false);
+    updateDots();
+
+    // Make each dot clickable.
+    dotButtons.forEach((dot, index) => {
+      dot.addEventListener("click", () => {
+        goToIndex(index);
+      });
+    });
+
+    // Auto-play only if there is more than one logo.
+    if (totalDots > 1) {
+      // Every 2000ms, advance by one index.
+      setInterval(() => {
+        goToIndex(currentIndex + 1);
+      }, 2000);
+    }
+
+    // Seamless loop trick:
+    // We duplicated logos in trackLogos, so we can slide into the clone set.
+    // After transition finishes and index passes real list,
+    // snap back to equivalent original index with no animation.
+    trackElement.addEventListener("transitionend", () => {
+      if (currentIndex >= totalDots) {
+        currentIndex -= totalDots;
+        setTransform(currentIndex, false);
+      }
+    });
+
+    // Recalculate position on resize (because visible count changes 5 <-> 3).
+    window.addEventListener("resize", () => {
+      setTransform(currentIndex, false);
+      updateDots();
+    });
+  }
+</script>

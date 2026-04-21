@@ -1,0 +1,158 @@
+<section class="nyhedsbrev">
+  <img
+    src="Imgs/half-circle-text.webp"
+    alt=""
+    aria-hidden="true"
+    class="nyhedsbrev-circle"
+  />
+
+  <div class="nyhedsbrev-content">
+    <h2>NYHEDSBREV</h2>
+
+    <form class="nyhedsbrev-form">
+      <input type="email" placeholder="E-mail" />
+      <button type="submit">Tilmeld</button>
+    </form>
+  </div>
+</section>
+
+<style>
+  .nyhedsbrev {
+    position: relative;
+    background: var(--the-beige);
+    padding: 46px 20px 80px;
+    overflow: visible;
+    margin: 60px 0;
+  }
+
+  .nyhedsbrev-circle {
+    position: absolute;
+    left: 10px;
+    top: 0;
+    width: 250px;
+    height: auto;
+    transform: translateY(-50%);
+  }
+
+  .nyhedsbrev-content {
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .nyhedsbrev h2 {
+    margin: 0 0 60px;
+    color: var(--the-green);
+    font-family: "Anton", sans-serif;
+    font-size: 5rem;
+    line-height: 1;
+    text-transform: uppercase;
+  }
+
+  .nyhedsbrev-form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+
+  .nyhedsbrev-form input {
+    width: 210px;
+    height: 36px;
+    border: 0;
+    background: white;
+    color: #aaaaaa;
+    padding: 0 16px;
+    border-radius: 6px;
+    font-size: 1.2rem;
+  }
+
+  .nyhedsbrev-form button {
+    height: 36px;
+    border: 0;
+    background: white;
+    color: #aaaaaa;
+    padding: 0 28px;
+    border-radius: 6px;
+    font-size: 1.2rem;
+    cursor: pointer;
+  }
+
+  .nyhedsbrev-form button:hover {
+    background: var(--the-green);
+    color: white;
+  }
+
+  @media (max-width: 700px) {
+    .nyhedsbrev-circle {
+      width: 100px;
+    }
+
+    .nyhedsbrev {
+      padding: 28px 16px 44px;
+    }
+
+    .nyhedsbrev h2 {
+      font-size: 2.5rem;
+      margin: 0 0 36px;
+    }
+
+    .nyhedsbrev-form {
+      gap: 12px;
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .nyhedsbrev-form input {
+      width: 100%;
+      max-width: 280px;
+      margin: 0 auto;
+      font-size: 1rem;
+    }
+
+    .nyhedsbrev-form button {
+      width: 100%;
+      max-width: 280px;
+      margin: 0 auto;
+      font-size: 1rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .nyhedsbrev {
+      padding: 20px 12px 36px;
+      margin: 40px 0;
+    }
+
+    .nyhedsbrev-circle {
+      width: 80px;
+      left: 6px;
+    }
+
+    .nyhedsbrev h2 {
+      font-size: 1.8rem;
+      margin: 0 0 28px;
+    }
+
+    .nyhedsbrev-content {
+      padding: 0 8px;
+    }
+
+    .nyhedsbrev-form {
+      gap: 10px;
+    }
+
+    .nyhedsbrev-form input {
+      height: 40px;
+      font-size: 0.95rem;
+      padding: 0 12px;
+    }
+
+    .nyhedsbrev-form button {
+      height: 40px;
+      font-size: 0.95rem;
+      padding: 0 20px;
+    }
+  }
+</style>

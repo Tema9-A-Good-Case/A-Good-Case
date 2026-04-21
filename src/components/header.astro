@@ -48,28 +48,6 @@ const cartCount = 3;
     align-items: center;
   }
 
-  .menu-button {
-    justify-self: start;
-    width: 44px;
-    height: 44px;
-    padding: 8px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: 6px;
-    border: 0;
-    background: transparent;
-    cursor: pointer;
-  }
-
-  .menu-button span {
-    display: block;
-    width: 24px;
-    height: 3px;
-    background: var(--the-black);
-    border-radius: 999px;
-  }
-
   .icon-button {
     position: relative;
     width: 52px;
@@ -97,22 +75,11 @@ const cartCount = 3;
     width: 250px;
   }
 
-  .brand-tagline {
-    display: flex;
-    gap: 16px;
-    font-weight: 800;
-    font-size: 1.5rem;
-  }
-
   .header-actions {
     display: flex;
     width: 100%;
     justify-content: flex-end;
     gap: 10px;
-  }
-
-  .cart-button {
-    position: relative;
   }
 
   .cart-badge {
@@ -140,16 +107,64 @@ const cartCount = 3;
     }
 
     .brand-logo {
-      width: 140px;
+      width: 168px;
     }
 
     .icon-button {
-      width: 44px;
-      height: 44px;
+      width: 36px;
+      height: 36px;
+    }
+
+    .icon-button img {
+      width: 20px;
+      height: 20px;
     }
 
     .header-actions {
-      gap: 4px;
+      gap: 2px;
+    }
+
+    .cart-badge {
+      top: 1px;
+      right: -2px;
+      font-size: 0.62rem;
+      padding: 2px 5px;
+      min-width: 16px;
+      text-align: center;
+      line-height: 1;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .header-inner {
+      padding: 12px 10px;
+      gap: 6px;
+    }
+
+    .brand-logo {
+      width: 182px;
+    }
+
+    .icon-button {
+      width: 32px;
+      height: 32px;
+    }
+
+    .icon-button img {
+      width: 22px;
+      height: 22px;
+    }
+
+    .header-actions {
+      gap: 1px;
+    }
+
+    .cart-badge {
+      top: -5px;
+      right: -3px;
+      font-size: 0.7rem;
+      padding: 4px 6px;
+      min-width: 14px;
     }
   }
 </style>
