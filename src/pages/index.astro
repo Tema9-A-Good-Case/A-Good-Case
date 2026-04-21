@@ -87,22 +87,22 @@ const mestSolgte = beers.slice(4, 8);
 	<section class="service-icons">
   <div class="service-item">
     <h3>FRI FRAGT OVER 499,-</h3>
-    <img src="Imgs/fragt.webp" alt="Fri fragt" />
+    <img src="/Imgs/fragt.webp" alt="Fri fragt" />
   </div>
 
   <div class="service-item levering">
     <h3>HURTIG LEVERING</h3>
-    <img src="Imgs/levering.webp" alt="Hurtig levering" />
+    <img src="/Imgs/levering.webp" alt="Hurtig levering" />
   </div>
 
   <div class="service-item">
     <h3>PRISGARANTI</h3>
-    <img src="Imgs/pris.webp" alt="Prisgaranti" />
+    <img src="/Imgs/pris.webp" alt="Prisgaranti" />
   </div>
 
   <div class="service-item">
     <h3>4.8 TRUSTPILOT</h3>
-    <img src="Imgs/trustpilot.webp" alt="Trustpilot" />
+    <img src="/Imgs/trustpilot.webp" alt="Trustpilot" />
   </div>
 </section>
 
@@ -123,7 +123,7 @@ const mestSolgte = beers.slice(4, 8);
   </div>
 
   <div class="about-image">
-    <img src="Imgs/Om-os.webp" alt="A Good Case team" />
+    <img src="/Imgs/Om-os.webp" alt="A Good Case team" />
   </div>
 </section>
 </Layout>
@@ -324,7 +324,7 @@ const mestSolgte = beers.slice(4, 8);
     }
 
     .products {
-      grid-template-columns: 1fr;
+      grid-template-columns: repeat(2, 1fr);
       gap: 18px;
       padding: 0 8px;
     }
@@ -400,6 +400,7 @@ const mestSolgte = beers.slice(4, 8);
     }
 
     .products {
+      grid-template-columns: repeat(2, 1fr);
       gap: 14px;
       padding: 0 4px;
     }
@@ -412,10 +413,6 @@ const mestSolgte = beers.slice(4, 8);
       height: 180px;
       width: 100%;
     }
-
-	.product-discount {
-	 margin-left: 70px;
-	}
 
     .product-brand {
       font-size: 1rem;
