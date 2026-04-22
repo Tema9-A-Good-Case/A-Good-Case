@@ -2,6 +2,8 @@
 import "../../styles/main.css";
 import Layout from '../layouts/Layout.astro';
 import Card from '../components/card.astro';
+import ProductFilter from '../components/ProductFilter.astro';
+import Sort from '../components/sort.astro';
 const endpoint = 'https://zuieoildetgsrnwghaza.supabase.co/rest/v1/Beer?select=*';
 
 
@@ -19,43 +21,28 @@ const data = await fetch(endpoint, options).then(response=>response.json());
 <Layout>
   <h2 class="list-title">SPECIAL-ØL</h2>
 	<p class="side-info">Vi har det bedste specialøl fra ind- og udland til markeds laveste priser. Øllet kan komme fra restpartier eller har etikettefejl, måske en lille bule. Du finder både øl med kort og lang best before-dato, så du nemt kan vælge det, der passer bedst til dig – uanset om det er til nu eller senere de skal drikkes.</p>
-	<section id="filter_buttons">
-  <button data-type="ALLE">ALLE</button>
-  <button data-type="IPA">IPA</button>
-  <button data-type="LAGER">LAGER</button>
-  <button data-type="PILSNER">PILSNER</button>
-  <button data-type="ALE">ALE</button>
-  <button data-type="ALKOHOLFRI">ALKOHOLFRI</button>
-  <button data-type="SYRLIGE">SYRLIGE</button>
-</section>
-  <section class="products-grid">
+  <div class="controls-row">
+    <ProductFilter />
+    <Sort />
+  </div>
+  <section class="products-grid" id="PList">
 		{data.map((product: any) => (<Card {product}/>))}
 	</section>
 </Layout>
 
-
-<script>
-  document
-    .querySelectorAll("#filter_buttons button")
-    .forEach((button) => {
-      button.addEventListener("click", filter);
-    });
-
-  function filter(e) {
-    const cards = document.querySelectorAll(".Pcard");
-    const valgtType = e.target.dataset.type;
-
-    cards.forEach((card) => {
-      if (card.dataset.type === valgtType || valgtType === "ALLE") {
-        card.classList.remove("hide");
-      } else {
-        card.classList.add("hide");
-      }
-    });
-  }
-</script>
-
 <style>
+  .list-title,
+  .side-info,
+  .products-grid {
+    position: relative;
+    z-index: 1;
+  }
+
+  .controls-row {
+	position: relative;
+	z-index: 100;
+  }
+
   .list-title {
     margin: 24px 0 20px;
     text-align: center;
@@ -76,25 +63,14 @@ const data = await fetch(endpoint, options).then(response=>response.json());
     line-height: 1.6;
   }
 
-  #filter_buttons {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
+  .controls-row {
     max-width: 1120px;
-    margin: 0 auto 26px;
+    margin: 0 auto 14px;
     padding: 0 8px;
-  }
-
-  #filter_buttons button {
-    border: 2px solid var(--the-green);
-    background: white;
-    color: var(--the-green);
-    font-family: var(--font);
-    font-weight: 700;
-    padding: 6px 12px;
-    border-radius: 8px;
-    cursor: pointer;
-    text-transform: uppercase;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
   }
 
   .products-grid {
@@ -115,7 +91,7 @@ const data = await fetch(endpoint, options).then(response=>response.json());
 
   }
 
-  @media (max-width: 640px) {
+  @media (max-width: 700px) {
     .list-title {
       font-size: 2.8rem;
       margin: 18px 0 8px;
@@ -132,14 +108,8 @@ const data = await fetch(endpoint, options).then(response=>response.json());
       padding: 0 8px 24px;
     }
 
-    #filter_buttons {
-      gap: 8px;
-      margin-bottom: 20px;
-    }
-
-    #filter_buttons button {
-      font-size: 0.9rem;
-      padding: 5px 10px;
+    .controls-row {
+      margin-bottom: 12px;
     }
   }
 

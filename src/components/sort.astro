@@ -1,0 +1,78 @@
+<section id="sort_buttons">
+  <button data-sort="acc">Pris Lo-Hi</button>
+  <button data-sort="dec">Pris Hi-Lo</button>
+</section>
+
+<script>
+    //@ts-check
+  document
+    .querySelectorAll("#sort_buttons button")
+    .forEach((button) => {
+      button.addEventListener("click", sorter);
+    });
+
+  function sorter(e) {
+    const valgtDir = e.target.dataset.sort;
+    const cards = document.querySelectorAll(".Pcard");
+    const container = document.querySelector("#PList");
+
+    document.querySelectorAll("#sort_buttons button").forEach((button) => {
+      button.classList.remove("is-active");
+    });
+    e.target.classList.add("is-active");
+
+    container.textContent = "";
+
+    let newList;
+
+    if (valgtDir === "acc") {
+      newList = [...cards].sort(
+        (a, b) => a.dataset.price - b.dataset.price
+      );
+    } else {
+      newList = [...cards].sort(
+        (a, b) => b.dataset.price - a.dataset.price
+      );
+    }
+
+    newList.forEach((card) => container.append(card));
+  }
+
+</script>
+
+<style>
+  #sort_buttons {
+    display: inline-flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+
+  #sort_buttons button {
+    border: 2px solid var(--the-green);
+    background: white;
+    color: var(--the-green);
+    font-family: var(--font);
+    font-weight: 700;
+    padding: 6px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    text-transform: uppercase;
+  }
+
+    #sort_buttons button.is-active {
+    background: var(--the-green);
+    color: white;
+  }
+
+  @media (max-width: 700px) {
+    #sort_buttons {
+      gap: 8px;
+    }
+
+    #sort_buttons button {
+      font-size: 0.9rem;
+      padding: 5px 10px;
+    }
+  }
+</style>

@@ -1,0 +1,147 @@
+<div class="filter-wrap">
+  <div class="filter-toggle">
+     <span>Pris</span>
+        <span class="filter-arrow">▼</span>
+     <span>Bryghus</span>
+      <span class="filter-arrow">▼</span>
+    <div class="filter-type-wrap">
+      <span class="filter-open">
+        <span>Øltype</span>
+        <span class="filter-arrow">▼</span>
+      </span>
+
+      <section id="filter_buttons">
+        <button data-type="ALLE">ALLE</button>
+        <button data-type="IPA">IPA</button>
+        <button data-type="LAGER">LAGER</button>
+        <button data-type="PILSNER">PILSNER</button>
+        <button data-type="ALE">ALE</button>
+        <button data-type="ALKOHOLFRI">ALKOHOLFRI</button>
+        <button data-type="SYRLIGE">SYRLIGE</button>
+      </section>
+    </div>
+  </div>
+</div>
+
+<script>
+  document
+    .querySelectorAll("#filter_buttons button")
+    .forEach((button) => {
+      button.addEventListener("click", filter);
+    });
+
+  function filter(e) {
+    const cards = document.querySelectorAll(".Pcard");
+    const valgtType = e.target.dataset.type;
+
+    document.querySelectorAll("#filter_buttons button").forEach((button) => {
+      button.classList.remove("is-active");
+    });
+    e.target.classList.add("is-active");
+
+    cards.forEach((card) => {
+      if (card.dataset.type === valgtType || valgtType === "ALLE") {
+        card.classList.remove("hide");
+      } else {
+        card.classList.add("hide");
+      }
+    });
+  }
+</script>
+
+<script>
+  const toggleButton = document.querySelector(".filter-open");
+  const filterButtons = document.querySelector("#filter_buttons");
+
+  if (toggleButton && filterButtons) {
+    toggleButton.addEventListener("click", () => {
+      filterButtons.classList.toggle("is-open");
+    });
+  }
+</script>
+
+<style>
+  .filter-wrap {
+    position: relative;
+    margin: 0;
+    z-index: 10;
+  }
+
+  .filter-toggle {
+    display: inline-flex;
+    align-items: center;
+    color: #000;
+    font-family: var(--font);
+    font-size: 1.2rem;
+    font-weight: 700;
+  }
+
+  .filter-open {
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+  }
+
+  .filter-type-wrap {
+    position: relative;
+    display: inline-flex;
+  }
+
+  .filter-arrow {
+    font-size: 0.8rem;
+    line-height: 1;
+    margin-left: 6px;
+    margin-right: 16px;
+  }
+
+  #filter_buttons {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    flex-direction: column;
+    gap: 10px;
+    width: max-content;
+    margin: 0;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.628);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+    border-radius: 8px;
+  }
+
+  #filter_buttons.is-open {
+    display: flex;
+  }
+
+  #filter_buttons button {
+    border: 2px solid var(--the-green);
+    background: white;
+    color: var(--the-green);
+    font-family: var(--font);
+    font-weight: 700;
+    padding: 6px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    text-transform: uppercase;
+  }
+
+  #filter_buttons button.is-active {
+    background: var(--the-green);
+    color: white;
+  }
+
+  @media (max-width: 700px) {
+    .filter-toggle {
+      font-size: 0.9rem;
+    }
+
+    #filter_buttons {
+      gap: 8px;
+    }
+
+    #filter_buttons button {
+      font-size: 0.9rem;
+      padding: 5px 10px;
+    }
+  }
+</style>

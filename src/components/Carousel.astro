@@ -11,15 +11,14 @@ const logos = [
   { src: "/Imgs/crew.webp", alt: "Crew Republic" },
 ];
 
-// Duplicate once so moving near the end still shows a full row of logos.
 const trackLogos = [...logos, ...logos];
 ---
 
-<section class="brewery-carousel" data-brewery-carousel>
+<section class="brewery-carousel">
   <h2>UDPLUK AF BRYGHUSE</h2>
 
   <div class="carousel-window">
-    <div class="carousel-track" data-carousel-track>
+    <div class="carousel-track">
       {trackLogos.map((logo) => (
         <div class="logo-item">
           <img src={logo.src} alt={logo.alt} />
@@ -28,17 +27,68 @@ const trackLogos = [...logos, ...logos];
     </div>
   </div>
 
-  <div class="carousel-dots" data-carousel-dots>
-    {logos.map((_, index) => (
+  <div class="carousel-dots">
+    <!--one dot per original logo (not per duplicated logo).
+      i starts at 0, so the first dot gets "is-active" on first load.
+    -->
+    {logos.map((_, i) => (
       <button
-        class:list={["carousel-dot", index === 0 && "is-active"]}
+        class:list={["carousel-dot", i === 0 && "is-active"]} 
         type="button"
-        aria-label={`Go to logo ${index + 1}`}
-        data-dot={index}
-      ></button>
+      />
     ))}
   </div>
 </section>
+
+<script>
+  //@ts-nocheck
+
+
+  const track = document.querySelector(".carousel-track");
+  const dots = document.querySelectorAll(".carousel-dot");
+  let index = 0;
+  // Total real steps (same as number of dots).
+  const total = dots.length;
+
+  // Updates the carousel position and active dot.
+  function update(animate = true) {
+    track.style.transition = animate ? "transform 0.2s ease" : "none"; 
+
+    // Each step moves 20% because desktop view shows 5 logos (100/5 = 20).
+    // feks. index 1 = -20%, index 2 = -40%
+    track.style.transform = `translateX(-${index * 20}%)`;
+
+    // Highlights the correct dot.
+    // so after last dot it goes back to first.
+    dots.forEach((dot, i) =>
+      dot.classList.toggle("is-active", i === index % total)
+    );
+  }
+
+  dots.forEach((dot, i) => {
+    dot.onclick = () => {
+      index = i;
+      update();
+    };
+  });
+
+  setInterval(() => {
+    index++;
+    update();
+  }, 2000);
+
+  // Infinite-loop trick
+  // When we pass the real end, we subtract total and jump back instantly
+  track.addEventListener("transitionend", () => {
+    if (index >= total) {
+      index -= total;
+      update(false);
+    }
+  });
+
+  // Initial render without animation to avoid glitcch
+  update(false);
+</script>
 
 <style>
   .brewery-carousel {
@@ -64,11 +114,13 @@ const trackLogos = [...logos, ...logos];
 
   .carousel-track {
     display: flex;
-    transition: transform 0.5s ease;
+    transition: transform 0.2s ease;
   }
 
+
+  /* Desktop: 5 logos */
   .logo-item {
-    flex: 0 0 calc(100% / 5);
+    flex: 0 0 20%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -104,11 +156,7 @@ const trackLogos = [...logos, ...logos];
     background: #000;
   }
 
-  @media (max-width: 900px) {
-    .logo-item {
-      flex-basis: calc(100% / 3);
-    }
-
+  @media (max-width: 1000px) {
     .logo-item img {
       max-width: 110px;
       max-height: 70px;
@@ -120,7 +168,12 @@ const trackLogos = [...logos, ...logos];
     }
   }
 
-  @media (max-width: 640px) {
+  @media (max-width: 700px) {
+     /* mobile: 3 logos */
+        .logo-item {
+      flex: 0 0 33.333%;
+    }
+    
     .brewery-carousel {
       padding: 32px 16px 24px;
     }
@@ -180,96 +233,3 @@ const trackLogos = [...logos, ...logos];
     }
   }
 </style>
-
-<script>
-  // @ts-nocheck
-
-  // Find the outer carousel section using its data-attribute selector.
-  const carousel = document.querySelector("[data-brewery-carousel]");
-  // From the carousel section, find the moving track element.
-  const trackElement = carousel?.querySelector("[data-carousel-track]");
-
-  // Find all dot buttons inside the carousel.
-  const dotButtons = carousel?.querySelectorAll("[data-dot]");
-  // dotButtons.length is number of dot elements.
-  if (!trackElement || !dotButtons.length) {
-  } else {
-    // Current position in the logo sequence. Starts at first item (0).
-    let currentIndex = 0;
-
-    // Total number of real logos/dots (9 in your case).
-    const totalDots = dotButtons.length;
-
-    // Duration in milliseconds for each slide animation.
-    const duration = 200;
-
-    // Helper function that tells us how many logos are visible now.
-    // On screens <= 900px: 3 logos.
-    // On larger screens: 5 logos.
-    const getVisibleLogos = () =>
-      window.matchMedia("(max-width: 900px)").matches ? 3 : 5;
-
-    // Move track to a given index.
-    // index = which logo offset we want.
-    // withAnimation = true for smooth motion, false for instant snap.
-    const setTransform = (index, withAnimation = true) => {
-      // Convert index to percent shift.
-      // Example desktop: one step = 100/5 = 20%.
-      const shiftPercent = index * (100 / getVisibleLogos());
-
-      // Set CSS transition based on whether we want animation.
-      trackElement.style.transition = withAnimation
-        ? `transform ${duration}ms ease`
-        : "none";
-
-      // Actually move the track left (negative direction) by computed percent.
-      trackElement.style.transform = `translateX(-${shiftPercent}%)`;
-    };
-
-    // Update which dot appears active.
-    const updateDots = () => {
-      const activeIndex = ((currentIndex % totalDots) + totalDots) % totalDots;
-      // Loop over each dot and toggle "is-active" on the matching one.
-      dotButtons.forEach((dot, i) => {
-        dot.classList.toggle("is-active", i === activeIndex);
-      });
-    };
-    // Single function to change index and redraw both track + dots.
-    const goToIndex = (index) => {
-      currentIndex = index;
-      setTransform(currentIndex, true);
-      updateDots();
-    };
-
-    // Initial render when page loads: position track and set correct dot.
-    setTransform(currentIndex, false);
-    updateDots();
-
-    // Make each dot clickable.
-    dotButtons.forEach((dot, index) => {
-      dot.addEventListener("click", () => {
-        goToIndex(index);
-      });
-    });
-
-    // Auto-play only if there is more than one logo.
-    if (totalDots > 1) {
-      setInterval(() => {
-        goToIndex(currentIndex + 1);
-      }, 2000);
-    }
-    // Seamless loop trick:
-    trackElement.addEventListener("transitionend", () => {
-      if (currentIndex >= totalDots) {
-        currentIndex -= totalDots;
-        setTransform(currentIndex, false);
-      }
-    });
-
-    // Recalculate position on resize (because visible count changes 5 <-> 3).
-    window.addEventListener("resize", () => {
-      setTransform(currentIndex, false);
-      updateDots();
-    });
-  }
-</script>

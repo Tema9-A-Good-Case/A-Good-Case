@@ -4,7 +4,7 @@ import Button from "./button.astro";
 const { product } = Astro.props;
 ---
 
-<a href={`/details/${product.Handle}`} class="Pcard" data-type={product.Type}>
+<a href={`/details/${product.Handle}`} class="Pcard" data-type={product.Type} data-price={product.price_now}>
     <article class="product-card">
         <div class="product-image-wrap">
             {product.discount && (
@@ -111,7 +111,7 @@ const { product } = Astro.props;
         display: none;
     }
 
-    @media (max-width: 640px) {
+    @media (max-width: 700px) {
         .product-card img {
             width: min(100%, 160px);
             height: 220px;
