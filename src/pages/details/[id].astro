@@ -1,5 +1,6 @@
 ---
 import "../../../styles/main.css";
+import Button from "../../components/button.astro";
 import Layout from '../../layouts/Layout.astro';
 export async function getStaticPaths() {
     const endpoint = 'https://zuieoildetgsrnwghaza.supabase.co/rest/v1/Beer?select=*';
@@ -22,12 +23,209 @@ const options ={
 }
 
 const { id } = Astro.params;
-const { product } = Astro.props;
+const { product } = Astro.props as any;
 
 // @ts-nocheck
 ---
 <Layout>
+  
+  <section class="grid_1-1-1">
+    <div class="left_side">
+<h2>{product.type}</h2>
+<h2>{product.size}</h2>
+<h2>{product.percent}</h2>
+</div>
+
+<img src={product.image} alt="productimage"/>
+
+    <div class="right_side">
     <h1>{product.brand}</h1>
 <h1>{product.name}</h1>
-<img src={product.image} alt="productimage"/>
+<div class="flex_stock">
+<h2 class="stock">{product.stock}</h2>
+<h2 class="best_before">BEST BEFORE: {product.date}</h2>
+</div>
+
+<div class="flex_price">
+<h2 class="new_price">{product.price_now} DKK</h2>
+<h2 class="old_price">{product.price_before} DKK</h2>
+</div>
+
+<div class="flex_antal">
+<h2>ANTAL:</h2>
+<div class="options">
+  <button class="option ">1 STK.</button>
+  <button class="option active">6 STK.</button>
+</div>
+</div>
+
+<div class="stepper">
+  <button onclick="changeValue(-1)">-</button>
+  <span id="value">1</span>
+  <button onclick="changeValue(1)">+</button>
+</div>
+
+<div>
+<Button text="LÆG I KURV" />
+</div>
+
+<div class="accordion">
+  <span>INFORMATION</span>
+  <span id="arrow">⌄</span>
+</div>
+
+<div id="content" class="hidden">
+  <p>{product.description}</p>
+</div>
+<div class="accordion">
+  <span>UNTAPPD RATING</span>
+  <span id="arrow">⌄</span>
+</div>
+</div>
+</section>
 </Layout>   
+
+<style>
+  .grid_1-1-1{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+  }
+
+  .grid_1-1-1 img{
+    grid-column: 2/4;
+    width: 600px;
+  }
+
+  .right_side{
+    grid-column: 4/6;
+  }
+
+  .left_side{
+    color: #129106;
+    grid-column: 1/2;
+    font-size: 30px;
+    font-family: 'Anton', sans-serif;
+  
+  
+  }
+
+  .flex_stock{
+    display: flex;
+    gap: 10px;
+  }
+
+  .stock{
+    color: #129106;
+  }
+
+  .best_before{
+    color: #434343;
+  }
+   .flex_price{
+    display: flex;
+    gap: 20px;
+  }
+
+  .old_price{
+  text-decoration: line-through;
+}
+
+.new_price{
+  color: #129106;
+}
+  .flex_antal{
+    display: flex;
+  }
+
+  .options {
+  display: flex;
+  gap: 10px;
+}
+
+.option {
+  padding: 1px 10px;
+  border: 2px solid black;
+  border-radius: 10px;
+  background: white;
+  cursor: pointer;
+}
+
+/* valgt knap */
+.option.active {
+  border-color:#129106;
+
+}
+
+
+
+  .stepper {
+  display: inline-flex;
+  align-items: center;
+  border: 2px solid black;
+  border-radius: 10px;
+  padding: 4px 10px;
+  gap: 15px;
+  font-size: 20px;
+}
+
+.stepper button {
+  background: none;
+  border: none;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.accordion {
+  display: flex;
+  align-items: center;
+  font-size: 18px;
+  cursor: pointer;
+  padding: 10px 0;
+}
+
+#arrow {
+  transition: transform 0.3s ease;
+}
+
+.hidden {
+  display: none;
+}
+
+@media (max-width: 800px){
+  
+}
+ 
+</style>
+
+<script is:inline>  
+ let value = 1;
+
+  window.changeValue = function(amount) {
+    value += amount;
+
+    if (value < 0) value = 0;
+
+    document.getElementById("value").innerText = value;
+  }
+
+
+const accordion = document.querySelector(".accordion");
+  const content = document.getElementById("content");
+  const arrow = document.getElementById("arrow");
+
+  accordion.addEventListener("click", () => {
+    content.classList.toggle("hidden");
+
+  });
+
+
+
+  const buttons = document.querySelectorAll(".option");
+
+  buttons.forEach(btn => {
+    btn.addEventListener("click", () => {
+      buttons.forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+    });
+  });
+</script>
