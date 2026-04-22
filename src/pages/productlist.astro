@@ -103,7 +103,6 @@ const data = await fetch(endpoint, options).then(response=>response.json());
     }
 
     .products-grid {
-      grid-template-columns: repeat(2, 1fr);
       gap: 18px;
       padding: 0 8px 24px;
     }
@@ -114,10 +113,6 @@ const data = await fetch(endpoint, options).then(response=>response.json());
   }
 
   @media (max-width: 480px) {
-    .list-title {
-      font-size: 2.2rem;
-    }
-
     .side-info {
       font-size: 0.9rem;
       line-height: 1.5;
