@@ -1,29 +1,47 @@
 ---
 import "../../../styles/main.css";
 import Button from "../../components/button.astro";
+import Marquee from "../../components/Marquee.astro";
 import Layout from '../../layouts/Layout.astro';
+
 export async function getStaticPaths() {
-    const endpoint = 'https://zuieoildetgsrnwghaza.supabase.co/rest/v1/Beer?select=*';
+  const endpoint = 'https://zuieoildetgsrnwghaza.supabase.co/rest/v1/Beer?select=*';
 
+  const options = {
+    headers: {
+      apikey: "sb_publishable_fRKMouw3PcFSl16n3SjRxA_JOmMHW48",
+    },
+  };
 
-const options ={
-	headers:{
-		apikey: "sb_publishable_fRKMouw3PcFSl16n3SjRxA_JOmMHW48",
-	},
-};
   const response = await fetch(endpoint, options);
   const data = await response.json();
 
   return data.map((product: any) => {
     return {
-      params: { id: product.Handle},
+      params: { id: product.Handle },
       props: { product },
     };
   });
 }
 
-const { id } = Astro.params;
 const { product } = Astro.props as any;
+
+
+const endpoint = 'https://zuieoildetgsrnwghaza.supabase.co/rest/v1/Beer?select=*';
+
+const options = {
+  headers: {
+    apikey: "sb_publishable_fRKMouw3PcFSl16n3SjRxA_JOmMHW48",
+  },
+};
+
+const res = await fetch(endpoint, options);
+const allProducts = await res.json();
+
+const lignendeProdukter = allProducts
+  .filter((p: any) => p.Handle !== product.Handle)
+  .slice(0, 3);
+
 
 // @ts-nocheck
 ---
@@ -38,6 +56,7 @@ const { product } = Astro.props as any;
 
 <img src={product.image} alt="productimage"/>
 
+
     <div class="right_side">
     <h1>{product.brand}</h1>
 <h1>{product.name}</h1>
@@ -47,8 +66,14 @@ const { product } = Astro.props as any;
 </div>
 
 <div class="flex_price">
-<h2 class="new_price">{product.price_now} DKK</h2>
-<h2 class="old_price">{product.price_before} DKK</h2>
+  <h2 class="new_price">{product.price_now} DKK</h2>
+
+  {product.price_before && (
+    <>
+      <span class="divider">|</span>
+      <h2 class="old_price">{product.price_before} DKK</h2>
+    </>
+  )}
 </div>
 
 <div class="flex_antal">
@@ -65,8 +90,8 @@ const { product } = Astro.props as any;
   <button onclick="changeValue(1)">+</button>
 </div>
 
-<div>
-<Button text="LÆG I KURV" />
+<div class="btn_class">
+<button class="kurv_btn">LÆG I KURV</button>
 </div>
 
 <div class="accordion">
@@ -83,18 +108,71 @@ const { product } = Astro.props as any;
 </div>
 </div>
 </section>
+	<Marquee />
+<section class="product-section best-sellers">
+  <h1>LIGNENDE PRODUKTER</h1>
+
+<div class="products">
+  {lignendeProdukter.map((item: any) => (
+    <article class="product-card">
+      <div class="product-image-wrap">
+        {item.discount && (
+          <span class="product-discount">
+            SPAR {item.discount}
+          </span>
+        )}
+        <img src={item.image} alt={item.name} />
+      </div>
+
+      <h3 class="product-brand">{item.brand}</h3>
+      <p class="product-name">{item.name}</p>
+      <p class="product-price">{item.price_now} DKK</p>
+     <Button text="LÆG I KURV" />
+    </article>
+  ))}
+</div>
+<section class="service-icons">
+  <div class="service-item">
+    <h3>FRI FRAGT OVER 499,-</h3>
+    <img src="/Imgs/fragt.webp" alt="Fri fragt" />
+  </div>
+
+  <div class="service-item levering">
+    <h3>HURTIG LEVERING</h3>
+    <img src="/Imgs/levering.webp" alt="Hurtig levering" />
+  </div>
+
+  <div class="service-item">
+    <h3>PRISGARANTI</h3>
+    <img src="/Imgs/pris.webp" alt="Prisgaranti" />
+  </div>
+
+  <div class="service-item">
+    <h3>4.8 TRUSTPILOT</h3>
+    <img src="/Imgs/trustpilot.webp" alt="Trustpilot" />
+  </div>
+</section>
+</section>
+ 
+          
+
 </Layout>   
 
 <style>
   .grid_1-1-1{
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr ;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    padding-right: 80px;
   }
 
   .grid_1-1-1 img{
     grid-column: 2/4;
-    width: 600px;
-  }
+    width: 100%;
+
+}
+
 
   .right_side{
     grid-column: 4/6;
@@ -103,28 +181,55 @@ const { product } = Astro.props as any;
   .left_side{
     color: #129106;
     grid-column: 1/2;
-    font-size: 30px;
+    font-size: 25px;
     font-family: 'Anton', sans-serif;
-  
+
+   display: flex;
+   flex-direction: column;
+   justify-content: center;   
+   align-items: flex-start;   
+   text-align: left;          
+   padding-left: 80px; 
   
   }
 
+  .grid_1-1-1 h1{
+    font-size: 50px;
+    font-family: 'Anton', sans-serif;
+  }
+
+
   .flex_stock{
     display: flex;
-    gap: 10px;
+   
+    justify-content: space-between;
   }
 
   .stock{
     color: #129106;
+    font-size: 15px;
+     font-family: "Inter", sans-serif;
   }
 
   .best_before{
     color: #434343;
+     font-size: 15px;
+     font-family: "Inter", sans-serif;
   }
+
    .flex_price{
     display: flex;
     gap: 20px;
+    font-family: "Inter", sans-serif;
+    font-size: 18px;
+    padding-top: 20px;
+    align-items: center;
+
   }
+  .divider {
+  margin: 0 5px;
+  color: #000000;
+}
 
   .old_price{
   text-decoration: line-through;
@@ -133,66 +238,725 @@ const { product } = Astro.props as any;
 .new_price{
   color: #129106;
 }
-  .flex_antal{
-    display: flex;
-  }
+.flex_antal{
+ display: flex;
+  font-family: "Inter", sans-serif;
+  padding-top: 20px;
+  align-items: center;
+  padding-bottom: 18px;
+}
+
+.flex_antal h2{
+  font-size: 24px;
+  padding-right: 40px;
+
+}
+
 
   .options {
   display: flex;
-  gap: 10px;
+  gap: 20px;
 }
 
 .option {
-  padding: 1px 10px;
-  border: 2px solid black;
+  padding: 3px 15px;
+  border: 3px solid black;
   border-radius: 10px;
   background: white;
   cursor: pointer;
+  font-size: 18px;
 }
 
-/* valgt knap */
 .option.active {
   border-color:#129106;
-
 }
 
-
-
-  .stepper {
+.stepper {
   display: inline-flex;
   align-items: center;
-  border: 2px solid black;
+  border: 3px solid black;
   border-radius: 10px;
-  padding: 4px 10px;
+  padding: 5px 20px;
   gap: 15px;
-  font-size: 20px;
+  font-size: 24px;
+   font-family: "Inter", sans-serif;
+
 }
 
 .stepper button {
   background: none;
   border: none;
-  font-size: 15px;
+  font-size: 24px;
   cursor: pointer;
 }
+
+.btn_class{
+  padding-top: 18px;
+  padding-bottom: 10px;
+}
+.kurv_btn{
+  padding: 8px 18px;
+  font-size: 24px;
+   font-family: "Inter", sans-serif;
+   border-radius: 8px ;
+   background: var(--the-green);
+   border: 2px solid var(--the-green);
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 3px 5px rgba(255, 255, 255, 0.35);
+    color: var(--the-beige);
+    font-weight: 800;
+}
+
+ .kurv_btn:hover {
+    background: white;
+    color: var(--the-green);
+    border: 2px solid var(--the-green);
+    box-shadow: 0 3px 5px rgba(18, 145, 6, 0.28);
+  }
 
 .accordion {
   display: flex;
   align-items: center;
-  font-size: 18px;
+  justify-content: end;
+  font-size: 24px;
   cursor: pointer;
   padding: 10px 0;
+  font-family: "Inter", sans-serif;
+  font-weight: bold;
 }
 
 #arrow {
   transition: transform 0.3s ease;
+  
 }
 
 .hidden {
   display: none;
 }
 
-@media (max-width: 800px){
+/* --- SE LIGENDEN-- */
+.product-section {
+    padding: 44px 32px 8  px;
+  }
+
+  .best-sellers {
+    margin-top: 20px;
+  }
+
+  .best-sellers h1{
+    font-size: 60px;
+    font-family: 'Anton', sans-serif;
+    text-align: center;
+    padding-bottom: 20px;
+  }
+
+  .section-title {
+    text-align: left;
+    font-size: 5rem;
+    font-family: 'Anton', sans-serif;
+    line-height: 0.92;
+    letter-spacing: 0.01em;
+    margin: 0 150px 22px;
+  }
+
+  .products {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    max-width: 1120px;
+    margin: 0 auto;
+    
+  }
+
+  .product-card {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 470px;
+    border: 1px solid #e6e6e6;
+    border-radius: 10px;
+    padding: 10px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease,
+      border-color 0.2s ease;
+  }
+
+  .product-card:hover {
+    transform: translateY(-3px);
+    border-color: #d0d0d0;
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.08);
+  }
+
+  .product-image-wrap {
+    position: relative;
+    width: 100%;
+  }
+
+  .product-card img {
+    width: 100%;
+    height: 280px;
+    object-fit: contain;
+    margin-bottom: 6px;
+  }
+
+  .product-discount {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    z-index: 1;
+    padding: 4px 10px;
+    border-radius: 8px;
+    background: var(--the-green);
+    color: white;
+    font-size: 0.85rem;
+    font-family: var(--font);
+    font-weight: 700;
+    text-transform: uppercase;
+    line-height: 1;
+  }
+
+  .product-brand {
+    margin: 0;
+    font-size: 1.2rem;
+    line-height: 1;
+    font-family: var(--font);
+    text-transform: uppercase;
+    min-height: 1.2rem;
+  }
+
+  .product-name {
+    margin: 0;
+    font-size: 1.2rem;
+    line-height: 1.08;
+    font-family: var(--font);
+    text-transform: uppercase;
+    max-width: 210px;
+    min-height: 2.6rem;
+    overflow: hidden;
+  }
+
+  .product-price {
+    margin: 2px 0 8px;
+    font-size: 1.05rem;
+    font-family: var(--font);
+    color: var(--the-green);
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+
+   .service-icons {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  padding: 42px 32px 46px;
+  text-align: center;
+  margin-top: 60px;
+}
+
+.service-item h3 {
+  margin: 0 0 50px;
+  font-size: 1.5rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-family: var(--font);
+}
+
+.service-item img {
+  width: 70px;
+  height: 70px;
+  object-fit: contain;
+  object-position: center;
+  margin: 0 auto;
+}
+.service-item.levering img {
+	  width: 80px;
+  height: 80px;
+}
+
+
+
+@media (max-width: 1000px){
   
+  .grid_1-1-1{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding-bottom: 18px;
+     padding-right: 60px;
+  }
+
+ 
+  .left_side{
+    font-size: 10px;
+    grid-column: 1/2;
+    grid-row: 2;
+    display: flex;
+   flex-direction:row;
+   justify-content: space-between;   
+   align-items: start;   
+   text-align: start;        
+
+  }
+
+    .grid_1-1-1 img{
+      grid-column: 1/2;
+      grid-row: 1;
+    }
+
+
+
+  .right_side{
+    grid-column: 2/3;
+    padding-right: 60px;
+
+  }
+
+
+  .grid_1-1-1 h1{
+    font-size: 40px;
+
+  }
+
+
+  .stock{
+    font-size: 12px;
+  }
+
+  .best_before{
+
+     font-size: 12px;
+
+  }
+
+   .flex_price{
+    gap: 5px;
+    
+    font-size: 16px;
+    padding-top: 15px;
+   
+
+  }
+
+
+
+.flex_antal{
+
+  padding-top: 15px;
+  
+  padding-bottom: 13px;
+}
+
+.flex_antal h2{
+  font-size: 20px;
+  padding-right: 15px;
+
+}
+
+
+  .options {
+  gap: 15px;
+}
+
+.option {
+  padding: 4px 12px;
+  border: 3px solid black;
+  border-radius: 7px;
+  font-size: 15px;
+}
+
+
+
+.stepper {
+ 
+  border: 3px solid black;
+  border-radius: 7px;
+  padding: 4px 16px;
+  gap: 15px;
+  font-size: 20px;
+  
+
+}
+
+.stepper button {
+  font-size: 20px;
+}
+
+.btn_class{
+  padding-top: 15px;
+  padding-bottom: 10px;
+}
+.kurv_btn{
+  padding: 8px 20px;
+  font-size: 20px;
+   border-radius: 8px ;}
+  
+
+.accordion {
+  font-size: 24px;
+  padding: 10px 0;
+}
+
+/* --- SE LIGENDEN-- */
+
+ .products {
+      grid-template-columns: repeat(3, 1fr);
+      max-width: 680px;
+    }
+
+    .product-section {
+      padding: 34px 16px 8px;
+    }
+
+    .best-sellers h1{
+    font-size: 50px;}
+
+    .service-icons {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 28px;
+      padding: 32px 16px 36px;
+    }
+
+    .service-item h3 {
+      margin: 0 0 32px;
+      font-size: 1.1rem;
+    }
+
+    .service-item img {
+      width: 60px;
+      height: 60px;
+    }
+
+    .service-item.levering img {
+      width: 68px;
+      height: 68px;
+    }
+
+}
+
+
+
+
+@media (max-width: 640px){
+  
+.grid_1-1-1{
+    padding-bottom: 14px;
+     padding-right: 60px;  
+  }
+ 
+  .left_side{
+    font-size: 8px;
+    grid-column: 1/2;
+    grid-row: 2;
+         
+
+  }
+
+    .grid_1-1-1 img{
+      grid-column: 1/2;
+      grid-row: 1;
+    }
+
+
+
+  .right_side{
+    grid-column: 2/3;
+    padding-right: 40px;
+
+  }
+
+
+  .grid_1-1-1 h1{
+    font-size: 30px;
+
+  }
+
+
+  .stock{
+    font-size: 10px;
+  }
+
+  .best_before{
+
+     font-size: 10px;
+
+  }
+
+   .flex_price{
+    gap: 4px;
+    
+    font-size: 13px;
+    padding-top: 8px;
+   
+
+  }
+
+
+.flex_antal{
+
+  padding-top: 13px;
+  
+  padding-bottom: 11px;
+}
+
+.flex_antal h2{
+  font-size: 18px;
+  padding-right: 13px;
+
+}
+
+
+  .options {
+  gap: 13px;
+}
+
+.option {
+  padding: 1px 10px;
+  border: 3px solid black;
+  border-radius: 6px;
+  font-size: 15px;
+}
+
+
+.stepper {
+ 
+  border: 3px solid black;
+  border-radius: 6px;
+  padding: 3px 14px;
+  gap: 13px;
+  font-size: 18px;
+  
+
+}
+
+.stepper button {
+  font-size: 16px;
+}
+
+.btn_class{
+  padding-top: 13px;
+  padding-bottom: 8px;
+}
+.kurv_btn{
+  padding: 7px 18px;
+  font-size: 18px;
+   border-radius: 7px ;}
+  
+
+.accordion {
+  font-size: 22px;
+  padding: 9px 0;
+}
+
+ .products {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .products article:nth-child(3) {
+    display: none;
+  }
+
+  .best-sellers h1{
+    font-size: 40px;}
+
+.service-icons {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 28px;
+      padding: 32px 16px 36px;
+    }
+
+    .service-item h3 {
+      margin: 0 0 32px;
+      font-size: 1.1rem;
+    }
+
+    .service-item img {
+      width: 60px;
+      height: 60px;
+    }
+
+    .service-item.levering img {
+      width: 68px;
+      height: 68px;
+    }
+
+}
+@media (max-width: 480px){
+
+  .grid_1-1-1{
+    padding-bottom: 10px;
+     padding-right: 20px;  
+  }
+   .left_side{
+    font-size: 8px;
+    grid-column: 1/2;
+    grid-row: 2;
+         
+
+  }
+
+    .grid_1-1-1 img{
+      grid-column: 1/2;
+      grid-row: 1;
+      width: 200px;
+    }
+
+
+
+  .right_side{
+    grid-column: 2/3;
+    padding-right: 20px;
+
+  }
+
+
+  .grid_1-1-1 h1{
+    font-size: 18px;
+
+  }
+
+
+  .stock{
+    font-size: 8px;
+  }
+
+  .best_before{
+
+     font-size: 8px;
+
+  }
+
+   .flex_price{
+    gap: 2px;
+    
+    font-size: 11px;
+    padding-top: 7px;
+   
+
+  }
+
+
+
+
+.flex_antal{
+
+  padding-top: 10px;
+  
+  padding-bottom: 9px;
+}
+
+.flex_antal h2{
+  font-size: 15px;
+  padding-right: 8px;
+
+}
+
+
+  .options {
+  gap: 10px;
+}
+
+.option {
+  padding: 1px 7px;
+  border: 2px solid black;
+  border-radius: 4px;
+  font-size: 10px;
+}
+
+
+.stepper {
+ 
+  border: 2px solid black;
+  border-radius: 4px;
+  padding: 2px 8px;
+  gap: 10px;
+  font-size: 14px;
+  
+
+}
+
+.stepper button {
+  font-size: 14px;
+}
+
+.btn_class{
+  padding-top: 10px;
+  padding-bottom: 6px;
+}
+.kurv_btn{
+  padding: 5px 14px;
+  font-size: 13px;
+   border-radius: 6px ;}
+  
+
+.accordion {
+  font-size: 15px;
+  padding: 7px 0;
+}
+ 
+ .section-title {
+      font-size: 3rem;
+      margin: 22px 0px 22px;
+	  text-align: center;
+    }
+
+    .products {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+      padding: 0 4px;
+    }
+
+    .product-card {
+      min-height: 360px;
+    }
+
+    .product-card img {
+      height: 180px;
+      width: 100%;
+    }
+
+    .product-brand {
+      font-size: 1rem;
+    }
+
+    .product-name {
+      font-size: 1rem;
+      max-width: 100%;
+      min-height: 2.2rem;
+    }
+
+    .product-price {
+      font-size: 0.95rem;
+    }
+
+    .product-section {
+      padding: 20px 8px 4px;
+    }
+
+    .best-sellers h1{
+    font-size: 30px;}
+
+    .service-icons {
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      padding: 24px 12px 28px;
+    }
+
+    .service-item h3 {
+      margin: 0 0 24px;
+      font-size: 1rem;
+    }
+
+    .service-item img {
+      width: 54px;
+      height: 54px;
+    }
+
+    .service-item.levering img {
+      width: 60px;
+      height: 60px;
+    }
+
 }
  
 </style>
