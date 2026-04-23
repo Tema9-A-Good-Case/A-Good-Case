@@ -3,6 +3,7 @@ import "../../../styles/main.css";
 import Button from "../../components/button.astro";
 import Marquee from "../../components/Marquee.astro";
 import Layout from '../../layouts/Layout.astro';
+import Checkout from "../../components/checkout.astro";
 
 export async function getStaticPaths() {
   const endpoint = 'https://zuieoildetgsrnwghaza.supabase.co/rest/v1/Beer?select=*';
@@ -154,8 +155,7 @@ const lignendeProdukter = allProducts
 </section>
 </section>
  
-          
-
+    <Checkout product={product} />      
 </Layout>   
 
 <style>

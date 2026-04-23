@@ -1,0 +1,293 @@
+
+---
+const { product } = Astro.props;
+
+const priceNow = parseFloat(product.price_now);
+const priceBefore = product.price_before
+  ? parseFloat(product.price_before)
+  : 0;
+
+const saved = priceBefore ? (priceBefore - priceNow).toFixed(2) : null;
+---
+
+<div id="checkout-overlay" class="overlay"></div>
+
+<div id="checkout-drawer" class="drawer">
+    <div class="top_drawer">
+  <h2>INDKØBSKURV</h2>
+   <button id="close-checkout">✕</button>
+   </div>
+   <div class="green-line"></div>
+
+   <div class="cart-item">
+  <img src={product.image} class="cart-img" />
+
+  <div class="cart-info">
+    <h3>{product.name}</h3>
+    <p class="sub">{product.type} {product.size} {product.percent}</p>
+
+    <p class="price">{product.price_now} DKK</p>
+    <p class="qty-text">1 STK</p>
+    <p class="remove">Fjern</p>
+  </div>
+</div>
+ <div class="grey-line"></div>
+ 
+ <div class="check-bottom">
+ <div class="green-line"></div>
+ <p>Moms og levering beregnes ved kassen</p>
+ <div class="cart-summary">
+  {saved && (
+    <p class="saved">
+      Sparet ift. vejl. markedspris {saved} DKK
+    </p>
+  )}
+
+  <p class="total">
+    I alt: {product.price_now} DKK
+  </p>
+</div>
+ <p>Pant: 3,00 DKK</p>
+ <div class="btnwrap">
+  <button class="check-btn">GÅ TIL KASSE</button>
+  </div>
+  <div class="trustpilot">
+        <img src="/Imgs/stars.webp" alt="Rating" />
+        <span>4.8 Trustpilot</span>
+      </div>
+</div>
+  
+
+<style>
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  display: none;
+  z-index: 999;
+}
+
+.overlay.open {
+  display: block;
+}
+
+.drawer {
+  position: fixed;
+  top: 0;
+  right: -400px;
+  width: 400px;
+  height: 100%;
+  background: white;
+  padding: 20px;
+  transition: 0.3s ease;
+  z-index: 1000;
+
+   display: flex;
+  flex-direction: column;
+}
+
+.top_drawer{
+    display: flex;
+    justify-content: space-between;
+}
+
+.top_drawer h2{
+    font-family: 'Anton', sans-serif;
+    font-size: 40px;
+    letter-spacing: 1px;
+
+}
+
+.drawer.open {
+  right: 0;
+}
+
+#close-checkout{
+    border: 0;
+    background: transparent;
+    color: #000;
+    font-size: 30px;
+    line-height: 1;
+    cursor: pointer;
+    margin-bottom: 18px;
+
+  }
+
+.green-line {
+  width: 100%;
+  height: 3px; 
+  background-color:var(--the-green);
+  margin: 20px 0px;
+}
+
+.grey-line{
+ width: 100%;
+  height: 2px; 
+  background-color:#656565;
+  margin: 20px 0px;
+}
+
+.cart-item{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.cart-info h3{
+     font-family: 'Anton', sans-serif;
+}
+
+.cart-info p{
+    font-family: "Inter", sans-serif;
+    padding: 2px 0px;
+}
+
+.sub{
+    color: #565555;
+}
+
+.price{
+    color: var(--the-green);
+}
+
+.qty-text{
+    color: #434343;
+}
+
+.remove{
+    color: #434343;
+    text-decoration: underline;
+}
+
+.trustpilot {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--font);
+    font-size: 16px;
+  }
+
+  .trustpilot img {
+    width: 80px;
+  }
+
+  .check-bottom{
+     font-family: "Inter", sans-serif;
+     color:#656565;
+     margin-top: auto;
+  }
+
+  .cart-summary{
+    text-align: end;
+    padding: 30px 0px;
+  }
+
+  .saved{
+    color: var(--the-green);
+    padding-bottom: 5px;
+  }
+
+  .total{
+    color: #000;
+  }
+
+  .check-btn{
+  display: inline-block;
+    padding: 9px 30px;
+    background: var(--the-green);
+    color: var(--the-beige);
+    font-size: 18px;
+    font-weight: 500;
+    border-radius: 8px;
+    border: 2px solid var(--the-green);
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 3px 5px rgba(255, 255, 255, 0.35);
+  }
+.btnwrap {
+  display: flex;
+  justify-content: center; 
+padding: 20px 0px;}
+  
+
+  .check-btn:hover {
+    background: white;
+    color: var(--the-green);
+    box-shadow: 0 3px 5px rgba(18, 145, 6, 0.28);
+  }
+
+
+
+@media (max-width: 480px){
+ 
+
+.drawer {
+  right: -250px;
+  width: 250px;
+}
+
+
+
+.top_drawer h2{
+    font-size: 28px;
+}
+
+
+
+#close-checkout{
+    font-size: 20px;
+  }
+
+.green-line {
+  height: 2px; 
+}
+
+.grey-line{
+  height: 1px; 
+}
+
+
+
+.cart-info h3{
+     font-size: 15px ;
+}
+
+.cart-info p{
+    font-family: "Inter", sans-serif;
+    padding: 2px 0px;
+    font-size: 12px;
+}
+
+}
+
+</style>
+
+
+<script is:inline>
+setTimeout(() => {
+  const openBtn = document.getElementById("open-checkout");
+  const closeBtn = document.getElementById("close-checkout");
+  const drawer = document.getElementById("checkout-drawer");
+  const overlay = document.getElementById("checkout-overlay");
+
+  if (!openBtn || !closeBtn || !drawer || !overlay) {
+    console.log("missing elements");
+    return;
+  }
+
+  openBtn.onclick = () => {
+    drawer.classList.add("open");
+    overlay.classList.add("open");
+  };
+
+  closeBtn.onclick = () => {
+    drawer.classList.remove("open");
+    overlay.classList.remove("open");
+  };
+
+  overlay.onclick = () => {
+    drawer.classList.remove("open");
+    overlay.classList.remove("open");
+  };
+}, 100);
+</script>

@@ -5,6 +5,7 @@ import Marquee from "../components/Marquee.astro";
 import Button from "../components/button.astro";
 import Hero from "../components/hero.astro";
 import Layout from '../layouts/Layout.astro';
+import Checkout from '../components/checkout.astro';
 const endpoint = "https://zuieoildetgsrnwghaza.supabase.co/rest/v1/Beer?select=*&order=id.asc";
 
 const options = {
@@ -21,6 +22,8 @@ try {
 } catch (err) {
   console.error(err);
 }
+
+const selectedProduct = beers[0];
 
 // split products
 const nyheder = beers.slice(0, 4);
@@ -126,6 +129,7 @@ const mestSolgte = beers.slice(4, 8);
     <img src="/Imgs/Om-os.webp" alt="A Good Case team" />
   </div>
 </section>
+<Checkout product={selectedProduct} />
 </Layout>
 
 <style>
