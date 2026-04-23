@@ -21,13 +21,13 @@ const cartCount = 3;
         <img src="/Imgs/profile.webp" alt="Account" />
       </a>
 
-      <a href="/cart" class="icon-button cart-button">
-        <img src="/Imgs/cart.webp" alt="Cart" />
+      <button id="open-checkout" class="icon-button cart-button">
+  <img src="/Imgs/cart.webp" alt="Cart" />
 
-        {cartCount > 0 && (
-          <span class="cart-badge">{cartCount}</span>
-        )}
-      </a>
+  {cartCount > 0 && (
+    <span class="cart-badge">{cartCount}</span>
+  )}
+</button>
     </div>
 
   </div>
@@ -61,6 +61,12 @@ const cartCount = 3;
     width: 28px;
     height: 28px;
     object-fit: contain;
+  }
+
+  #open-checkout{
+    background-color: white;
+    border: white;
+    cursor: pointer;
   }
 
   .brand {
